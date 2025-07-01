@@ -1,3 +1,5 @@
+# ejemplo4/proyectoUno/Administrativo/views.py
+
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.template import RequestContext
@@ -134,3 +136,14 @@ def crear_numero_telefonico_estudiante(request, id):
     diccionario = {'formulario': formulario, 'estudiante': estudiante}
 
     return render(request, 'crearNumeroTelefonicoEstudiante.html', diccionario)
+
+# --- NUEVA VISTA PARA LISTAR NUMEROS TELEFONICOS CON DATATABLES ---
+def listar_numeros_telefonicos(request):
+    """
+    Vista para listar todos los números telefónicos con DataTables.
+    """
+    numeros = NumeroTelefonico.objects.all().order_by('id') # Obtiene todos los números de teléfono
+    context = {
+        'numeros': numeros
+    }
+    return render(request, 'listadoNumerosTelefonicos.html', context)

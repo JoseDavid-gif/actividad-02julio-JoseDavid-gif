@@ -1,0 +1,77 @@
+{% extends "master.html" %} 
+
+{% block title %}Listado de Números Telefónicos{% endblock %}
+
+{% block head %}
+    {{ block.super }}  
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.0.0/css/dataTables.dataTables.min.css"/>
+    
+    {# Si master.html ya tiene jQuery, puedes omitir esta línea #}
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    
+    <script type="text/javascript" src="https://cdn.datatables.net/2.0.0/js/dataTables.min.js"></script>
+
+    <style>
+        /* Opcional: Estilos para mejorar la apariencia si lo necesitas */
+        .dataTables_wrapper .dataTables_filter {
+            float: right;
+            text-align: right;
+        }
+        .dataTables_wrapper .dataTables_paginate {
+            float: right;
+            text-align: right;
+            padding-top: 0.25em;
+        }
+    </style>
+
+{% endblock %}
+
+{% block content %}
+    <h1>Listado de Números Telefónicos</h1>
+
+    <table id="tablaNumerosTelefonicos" class="display">
+        <thead>
+            <tr>
+                <th>Teléfono</th>
+                <th>Tipo</th>
+                <th>Estudiante</th>
+                {# Puedes añadir más columnas para acciones si lo deseas #}
+                <th>Acciones</th> 
+            </tr>
+        </thead>
+        <tbody>
+            {% for numero in numeros %}
+            <tr>
+                <td>{{ numero.telefono }}</td>
+                <td>{{ numero.tipo }}</td>
+                <td>{{ numero.estudiante.nombre }} {{ numero.estudiante.apellido }} ({{ numero.estudiante.cedula }})</td>
+                <td>
+                    <a href="{% url 'editar_numero_telefonico' numero.id %}">Editar</a> |
+                    {# Si tu profesor quiere una opción para eliminar desde aquí #}
+                    {# <a href="{% url 'eliminar_numero_telefonico' numero.id %}" onclick="return confirm('¿Estás seguro de eliminar este número?');">Eliminar</a> #}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }} {# Mantiene lo que ya tengas en los scripts de master.html #}
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#tablaNumerosTelefonicos').DataTable({
+                // Opciones opcionales de DataTables
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" // Traducción al español
+                },
+                "paging": true,     // Habilitar paginación
+                "searching": true,  // Habilitar búsqueda
+                "ordering": true,   // Habilitar ordenación
+                "info": true        // Mostrar información de la tabla
+            });
+        });
+    </script>
+{% endblock %}
